@@ -8,12 +8,6 @@ aws ec2 create-vpc \
   --cidr-block 10.0.0.0/16 \
   --tag-specifications "ResourceType=vpc,Tags=[{Key=Name,Value=Lab VPC}]"
 ```
-**1.2. Enable DNS hostnames:**
-```bash
-aws ec2 modify-vpc-attribute \
-  --vpc-id <vpc-id> \
-  --enable-dns-hostnames "{"Value":true}"
-```
 
 ---
 
@@ -130,7 +124,8 @@ aws ec2 run-instances \
   --key-name <key-name> \
   --subnet-id <subnet-id> \
   --security-group-ids <security-group-id> \
-  --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Bastion Server}]"
+  --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Bastion Server}]" \
+  --associate-public-ip-address 
 ```
 ---
 
