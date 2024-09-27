@@ -30,7 +30,7 @@ aws ec2 modify-subnet-attribute \
   --map-public-ip-on-launch
 ```
 
-**2.3. Creating a Private Subnet**
+**2.3. Creating a Private Subnet:**
 ```bash
 aws ec2 create-subnet \
   --vpc-id <vpc-id> \
@@ -117,7 +117,19 @@ aws ec2 run-instances \
   --security-group-ids <security-group-id> \
   --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Bastion Server}]" \
 ```
-⚠️ **Attention:** If you don't have a key pair, learn how to create one by following this [guide](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/create-key-pairs.html)
+---
+
+⚠️ **Attention:** If you don't have a key pair learn how to create one by following this [guide](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/create-key-pairs.html)
+
+---
+
+  - Alternatively to quickly create a Key Pair use this command before launching the EC2 instance:
+```bash
+aws ec2 create-key-pair \
+--key-name <new-key-name> \
+--query 'KeyMaterial' --output text > <new-key-name>.pem
+chmod 400 <new-key-name>.pem
+```
 
 ---
 
@@ -135,4 +147,57 @@ aws ec2 create-route \
   --route-table-id <route-table-id> \
   --destination-cidr-block 0.0.0.0/0 \
   --nat-gateway-id <nat-gateway-id>
+```
+
+---
+
+## Task 7: Logging into Bastion Server and Creating EC2 in Private Subnet
+**7.1. SSH into the Bastion Server:**
+```bash
+ssh -i <key-name>.pem ec2-user@<bastion-public-ip>
+```
+
+**7.2. Create a Security Group for the EC2 in the private subnet:**
+```bash
+aws ec2 create-security-group \
+  --group-name PrivateEC2SG \
+  --description "Security Group for EC2 in Private Subnet" \
+  --vpc-id <vpc-id>
+```
+
+**7.3. Authorize SSH access for the subnet 10.0.0.0/16:**
+```bash
+aws ec2 authorize-security-group-ingress \
+  --group-id <security-group-id> \
+  --protocol tcp \
+  --port 22 \
+  --cidr 10.0.0.0/16
+```
+
+**7.4. Launch the EC2 instance in the private subnet:**
+  - **AMI Suggestion:** `ami-0ebfd941bbafe70c6`. [Find an AMI](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html)
+```bash
+aws ec2 run-instances \
+  --image-id <ami-id> \
+  --instance-type t2.micro \
+  --key-name <key-name> \
+  --subnet-id <private-subnet-id> \
+  --security-group-ids <security-group-id> \
+  --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Private EC2}]"
+```
+---
+
+⚠️ **Attention:** For better security create a new Key Pair for the EC2 in the private subnet. Avoid reusing the Bastion Server Key Pair! 🔑 
+  - Refer to step 5.3 for instructions on creating a Key Pair.
+
+---
+
+**7.5. SSH from Bastion Server into the EC2 instance in the private subnet:**
+```bash
+ssh -i <key-name>.pem ec2-user@<private-ec2-private-ip>
+```
+
+**7.6. Perform a ping test to the NAT Gateway**
+```bash
+ping <nat-gateway-ip>
 ```
