@@ -1,4 +1,7 @@
 ## Task 1: Creating a VPC
+- Establishes a Virtual Private Cloud (VPC) to define a secure network environment for your resources
+---
+
 **1.1. Create a VPC:**
 ```bash
 aws ec2 create-vpc \
@@ -15,6 +18,9 @@ aws ec2 modify-vpc-attribute \
 ---
 
 ## Task 2: Creating Subnets
+- Set up public and private subnets within the VPC to organize resources and control traffic flow
+---
+  
 **2.1. Create the public subnet:**
 ```bash
 aws ec2 create-subnet \
@@ -42,6 +48,9 @@ aws ec2 create-subnet \
 ---
 
 ## Task 3: Creating an Internet Gateway
+- Enables internet access for the VPC by creating and attaching an Internet Gateway
+---
+  
 **3.1. Create an Internet Gateway:**
 ```bash
 aws ec2 create-internet-gateway \
@@ -57,6 +66,9 @@ aws ec2 attach-internet-gateway \
 ---
 
 ## Task 4: Configuring Route Tables
+- Manages routing within the VPC directing traffic from subnets to the Internet Gateway and NAT Gateway
+---
+  
 **4.1. Create a public route table.:**
 ```bash
 aws ec2 create-route-table \
@@ -92,6 +104,9 @@ aws ec2 associate-route-table \
 ---
 
 ## Task 5: Launching a Bastion Server
+- Creates a Bastion Server to facilitate secure SSH access to private instances within the VPC
+---
+  
 **5.1. Create a Security Group to allow SSH access:**
 ```bash
 aws ec2 create-security-group \
@@ -115,7 +130,7 @@ aws ec2 run-instances \
   --key-name <key-name> \
   --subnet-id <subnet-id> \
   --security-group-ids <security-group-id> \
-  --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Bastion Server}]" \
+  --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Bastion Server}]"
 ```
 ---
 
@@ -134,6 +149,9 @@ chmod 400 <new-key-name>.pem
 ---
 
 ## Task 6: Creating a NAT Gateway
+- Establishes a NAT Gateway to allow private instances to access the internet while remaining isolated
+---
+  
 **6.1. Create a NAT Gateway in the public subnet:**
 ```bash
 aws ec2 create-nat-gateway \
@@ -152,6 +170,9 @@ aws ec2 create-route \
 ---
 
 ## Task 7: Logging into Bastion Server and Creating EC2 in Private Subnet
+- Allows SSH access to the Bastion Server, creates an EC2 instance in the private subnet and tests connectivity to the NAT Gateway
+---
+  
 **7.1. SSH into the Bastion Server:**
 ```bash
 ssh -i <key-name>.pem ec2-user@<bastion-public-ip>
