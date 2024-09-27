@@ -217,3 +217,49 @@ ssh -i <key-name>.pem ec2-user@<private-ec2-private-ip>
 ```bash
 ping <nat-gateway-ip>
 ```
+
+---
+## Task 8: Deleting All Resources
+  - This task removes all resources created during the projet to prevent ongoin charges
+---
+
+**8.1. Terminate EC2 Instances:**
+```bash
+aws ec2 terminate-instances --instance-ids <instance-id>
+```
+
+**8.2. Delete Security Groups:**
+```bash
+aws ec2 delete-security-group --group-id <security-group-id>
+```
+
+**8.3. Delete the NAT Gateway:**
+```bash
+aws ec2 delete-nat-gateway --nat-gateway-id <nat-gateway-id>
+```
+
+**8.4. Delete Route Tables:**
+```bash
+aws ec2 delete-route-table --route-table-id <route-table-id>
+```
+
+**8.5. Detach and Delete the Internet Gateway:**
+```bash
+aws ec2 detach-internet-gateway --vpc-id <vpc-id> --internet-gateway-id <igw-id>
+aws ec2 delete-internet-gateway --internet-gateway-id <igw-id>
+```
+
+**8.6. Delete Subnets:**
+```bash
+aws ec2 delete-subnet --subnet-id <subnet-id>
+```
+
+**8.7. Delete the VPC:**
+```bash
+aws ec2 delete-vpc --vpc-id <vpc-id>
+```
+
+**8.8. Release Elastic IP**
+```bash
+aws ec2 release-address --allocation-id <eip-alloc-id>
+```
