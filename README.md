@@ -1,5 +1,18 @@
 # AWS VPC Configuring Lab
 
+In this lab, a virtual private cloud (VPC) and other necessary network components are built to deploy resources, such as an Amazon Elastic Compute Cloud (Amazon EC2) instance.
+
+- **VPC Setup:** Create a VPC with one public and one private subnet.
+- **Gateway Setup:** Add an Internet Gateway and a NAT Gateway for internet access.
+- **Route Tables:** Set up routes for internal and external traffic.
+- **Bastion Host:** Launch a Bastion server in the public subnet.
+- **Private Access:** Use the Bastion Host to create another EC2 instance.
+---
+⚠️ **Attention**: 
+- All the tasks will be completed via the command line using AWS CLI. Ensure you have the necessary permissions. [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- Charges may apply for completing this lab. [AWS Pricing](https://aws.amazon.com/pricing/)
+---
+
 <div align="center">
   <img src="screenshot/architecture.png" width=""/>
 </div>
@@ -38,7 +51,7 @@ aws ec2 create-subnet \
 #### 2.2. Enable auto-assign public IP:
 ```bash
 aws ec2 modify-subnet-attribute \
-  --subnet-id <subnet-id> \
+  --subnet-id <public-subnet-id> \
   --map-public-ip-on-launch
 ```
 
@@ -92,7 +105,7 @@ aws ec2 create-route-table \
 #### 4.2. Add a route for the Internet Gateway:
 ```bash
 aws ec2 create-route \
-  --route-table-id <route-table-id> \
+  --route-table-id <public-route-table-id> \
   --destination-cidr-block 0.0.0.0/0 \
   --gateway-id <igw-id>
 ```
@@ -100,7 +113,7 @@ aws ec2 create-route \
 ```bash
 aws ec2 associate-route-table \
   --route-table-id <route-table-id> \
-  --subnet-id <subnet-id>
+  --subnet-id <public-subnet-id>
 ```
 #### 4.4. Create a private route table:
 ```bash
@@ -111,8 +124,8 @@ aws ec2 create-route-table \
 #### 4.5. Associate the route table with the private subnet:
 ```bash
 aws ec2 associate-route-table \
-  --route-table-id <route-table-id> \
-  --subnet-id <subnet-id>
+  --route-table-id <private-route-table-id> \
+  --subnet-id <private-subnet-id>
 ```
 
 <div align="center">
@@ -135,7 +148,7 @@ aws ec2 create-security-group \
 #### 5.2. Authorize SSH access (port 22) in the security group:
 ```bash
 aws ec2 authorize-security-group-ingress \
-  --group-id <security-group-id> \
+  --group-id <bastion-security-group-id> \
   --protocol tcp \
   --port 22 \
   --cidr <your-machine-public-ip-address>/32
@@ -152,8 +165,8 @@ aws ec2 run-instances \
   --image-id <ami-id> \
   --instance-type t2.micro \
   --key-name <key-name> \
-  --subnet-id <subnet-id> \
-  --security-group-ids <security-group-id> \
+  --subnet-id <public-subnet-id> \
+  --security-group-ids <bastion-security-group-id> \
   --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Bastion Server}]" \
   --associate-public-ip-address 
 ```
@@ -193,14 +206,14 @@ aws ec2 allocate-address --domain vpc
 #### 6.2. Create a NAT Gateway in the public subnet:
 ```bash
 aws ec2 create-nat-gateway \
-  --subnet-id <subnet-id> \
+  --subnet-id <public-subnet-id> \
   --allocation-id <eip-alloc-id> \
   --tag-specifications "ResourceType=natgateway,Tags=[{Key=Name,Value=Lab NAT Gateway}]"
 ```
 #### 6.3. Add a route for the NAT Gateway in the private route table:
 ```bash
 aws ec2 create-route \
-  --route-table-id <route-table-id> \
+  --route-table-id <private-route-table-id> \
   --destination-cidr-block 0.0.0.0/0 \
   --nat-gateway-id <nat-gateway-id>
 ```
@@ -235,7 +248,7 @@ aws ec2 create-security-group \
 #### 7.3. Authorize SSH access for the subnet 10.0.0.0/16:
 ```bash
 aws ec2 authorize-security-group-ingress \
-  --group-id <security-group-id> \
+  --group-id <ec2-security-group-id> \
   --protocol tcp \
   --port 22 \
   --cidr 10.0.0.0/16
@@ -253,7 +266,7 @@ aws ec2 run-instances \
   --instance-type t2.micro \
   --key-name <key-name> \
   --subnet-id <private-subnet-id> \
-  --security-group-ids <security-group-id> \
+  --security-group-ids <ec2-security-group-id> \
   --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=Private EC2}]"
 ```
 
@@ -278,7 +291,7 @@ ssh -i <key-name>.pem ec2-user@<private-ec2-private-ip>
 
 #### 7.6. Perform a ping test to the NAT Gateway
 ```bash
-ping <nat-gateway-ip>
+ping -c 3 amazon.com
 ```
 
 <div align="center">
