@@ -273,6 +273,7 @@ aws ec2 run-instances \
 <div align="center">
   <img src="screenshot/7.4.PNG"/>
 </div>
+
 ---
 
 ⚠️ **Attention:** For better security create a new Key Pair for the EC2 in the private subnet. Avoid reusing the Bastion Server Key Pair! 🔑 
