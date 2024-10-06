@@ -1,6 +1,6 @@
 # AWS VPC Configuring Lab
 
-In this lab, a virtual private cloud (VPC) and other necessary network components are built to deploy resources, such as an Amazon Elastic Compute Cloud (Amazon EC2) instance.
+This lab builds a VPC and essential network components to deploy resources like an Amazon EC2 instance.
 
 - **VPC Setup:** Create a VPC with one public and one private subnet.
 - **Gateway Setup:** Add an Internet Gateway and a NAT Gateway for internet access.
@@ -8,7 +8,7 @@ In this lab, a virtual private cloud (VPC) and other necessary network component
 - **Bastion Host:** Launch a Bastion server in the public subnet.
 - **Private Access:** Use the Bastion Host to create another EC2 instance.
 ---
-⚠️ **Attention**: 
+⚠️ **Attention:**
 - All the tasks will be completed via the command line using AWS CLI. Ensure you have the necessary permissions. [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - Charges may apply for completing this lab. [AWS Pricing](https://aws.amazon.com/pricing/)
 ---
@@ -353,4 +353,8 @@ aws ec2 release-address --allocation-id <eip-alloc-id>
 <div align="center">
   <img src="screenshot/8.2.PNG"/>
 </div>
+
+---
+## Conclusion
+Bastion Host and NAT Gateway allow secure access to private instances improving account protection.
 
