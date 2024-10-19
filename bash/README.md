@@ -59,6 +59,8 @@ Please run the scripts in the following order:
   <img src="screenshot/5.PNG" width=""/>
 </div>
 
+---
+
 6. **Create NAT Gateway:**
 ```bash
 ./6.create-nat-gateway
@@ -68,13 +70,15 @@ Please run the scripts in the following order:
   <img src="screenshot/6.PNG" width=""/>
 </div>
 
+---
+
 7. **Cleanup:**
 ```bash
 ./7.cleanup
 ```
 
 <div align="center">
-  <img src="screenshot/7.PNG" width=""/>
+  <img src="screenshot/7.1.PNG" width=""/>
 </div>
 
 
