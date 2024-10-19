@@ -309,30 +309,30 @@ ping -c 3 amazon.com
 aws ec2 terminate-instances --instance-ids <instance-id>
 ```
 
-#### 8.2. Delete Security Groups:
-```bash
-aws ec2 delete-security-group --group-id <security-group-id>
-```
-
-#### 8.3. Delete the NAT Gateway:
+#### 8.2. Delete the NAT Gateway:
 ```bash
 aws ec2 delete-nat-gateway --nat-gateway-id <nat-gateway-id>
 ```
 
-#### 8.4. Delete Route Tables:
+#### 8.3. Delete Security Groups:
 ```bash
-aws ec2 delete-route-table --route-table-id <route-table-id>
+aws ec2 delete-security-group --group-id <security-group-id>
 ```
 
-#### 8.5. Detach and Delete the Internet Gateway:
+#### 8.4. Detach and Delete the Internet Gateway:
 ```bash
 aws ec2 detach-internet-gateway --vpc-id <vpc-id> --internet-gateway-id <igw-id>
 aws ec2 delete-internet-gateway --internet-gateway-id <igw-id>
 ```
 
-#### 8.6. Delete Subnets:
+#### 8.5. Delete Subnets:
 ```bash
 aws ec2 delete-subnet --subnet-id <subnet-id>
+```
+
+#### 8.6. Delete Route Tables:
+```bash
+aws ec2 delete-route-table --route-table-id <route-table-id>
 ```
 
 #### 8.7. Delete the VPC:
@@ -357,4 +357,5 @@ aws ec2 release-address --allocation-id <eip-alloc-id>
 ---
 ## Conclusion
 Bastion Host and NAT Gateway allow secure access to private instances improving account protection.
+![Click here](/bash) to access the automated version with shell scripts.
 
