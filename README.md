@@ -1,4 +1,10 @@
-# AWS VPC Configuring Lab
+# AWS Bastion Server Lab
+
+<div align="center">
+  <img src="screenshot/architecture.png" width=""/>
+</div>
+
+---
 
 This lab builds a VPC and essential network components to deploy resources like an Amazon EC2 instance.
 
@@ -11,12 +17,6 @@ This lab builds a VPC and essential network components to deploy resources like 
 ⚠️ **Attention:**
 - All the tasks will be completed via the command line using AWS CLI. Ensure you have the necessary permissions. [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - Charges may apply for completing this lab. [AWS Pricing](https://aws.amazon.com/pricing/)
----
-
-<div align="center">
-  <img src="screenshot/architecture.png" width=""/>
-</div>
-
 ---
 
 ## Task 1: Creating a VPC
